@@ -20,19 +20,21 @@ class RequestParser {
         }
 
         // 解析 body
-        StringBuilder bodyBuilder = new StringBuilder();
-        int i = 0;
-        while (i < 2) {
-            line = readHttpLine(bufferedReader);
-            if (line.equals(CRLF)) {
-                if (bodyBuilder.length() == 0)
-                    break;
-                i++;
-                continue;
+        if (request.getMethod().equals(HttpMethod.POST) || request.getMethod().equals(HttpMethod.PUT)) {
+            StringBuilder bodyBuilder = new StringBuilder();
+            int i = 0;
+            while (i < 2) {
+                line = readHttpLine(bufferedReader);
+                if (line.equals(CRLF)) {
+                    if (bodyBuilder.length() == 0)
+                        break;
+                    i++;
+                    continue;
+                }
+                bodyBuilder.append(line);
             }
-            bodyBuilder.append(line);
+            request.setBody(bodyBuilder.length() == 0 ? null : bodyBuilder.toString());
         }
-        request.setBody(bodyBuilder.length() == 0 ? null : bodyBuilder.toString());
         return request;
     }
 
