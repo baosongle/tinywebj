@@ -1,20 +1,29 @@
 package com.baosongle.tinywebj;
 
-import lombok.AllArgsConstructor;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
-@AllArgsConstructor
 public class SocketThread {
     private Socket socket;
 
-    public void start() throws IOException {
-        InputStream inputStream = socket.getInputStream();
-        Request request = RequestParser.parse(inputStream);
+    private Thread thread;
 
+    public SocketThread(Socket socket) {
+        this.socket = socket;
     }
 
+    public void start() throws IOException {
+        thread = new Thread(() -> {
+            try {
+                InputStream inputStream = socket.getInputStream();
+                Request request = RequestParser.parse(inputStream);
+            } catch (HttpParseException e) {
 
+            } catch (IOException e) {
+
+            }
+        });
+        thread.start();
+    }
 }
