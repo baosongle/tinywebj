@@ -1,5 +1,7 @@
 package com.baosongle.tinywebj;
 
+import com.baosongle.tinywebj.core.TinyWebJ;
+
 import java.io.IOException;
 
 public class Main {

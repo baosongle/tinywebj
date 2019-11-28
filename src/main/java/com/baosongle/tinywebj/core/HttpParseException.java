@@ -1,4 +1,4 @@
-package com.baosongle.tinywebj;
+package com.baosongle.tinywebj.core;
 
 public class HttpParseException extends Exception {
     public HttpParseException(String message) {

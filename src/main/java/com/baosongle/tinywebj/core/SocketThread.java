@@ -1,4 +1,4 @@
-package com.baosongle.tinywebj;
+package com.baosongle.tinywebj.core;
 
 import java.io.IOException;
 import java.io.InputStream;
