@@ -35,8 +35,8 @@ class SocketThread {
             httpHandler.handle(request, response);
             try {
                 log.info("Response with: {}", response.toString());
-                String responseText = ResponseParser.parse(response);
-                socket.getOutputStream().write(responseText.getBytes());
+                byte[] bytes = ResponseParser.parse(response);
+                socket.getOutputStream().write(bytes);
                 socket.close();
             } catch (IOException e) {
                 log.error("IO Error on writing response to client", e);

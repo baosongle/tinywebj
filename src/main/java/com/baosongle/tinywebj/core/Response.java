@@ -7,9 +7,9 @@ public class Response {
     private HttpStatusCode statusCode;
     private HttpVersion version;
 
-    private String body;
+    private byte[] body;
 
     public int getContentLength() {
-        return body == null ? 0 : body.length();
+        return body == null ? 0 : body.length;
     }
 }

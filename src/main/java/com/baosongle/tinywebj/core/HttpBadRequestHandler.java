@@ -10,6 +10,6 @@ public class HttpBadRequestHandler implements HttpHandler {
     public void handle(Request request, Response response) {
         response.setStatusCode(HttpStatusCode.BadRequest);
         response.setVersion(HttpVersion.HTTP_1_1);
-        response.setBody(errorMessage);
+        response.setBody(errorMessage.getBytes());
     }
 }

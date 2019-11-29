@@ -7,20 +7,21 @@ public class StaticResourceHandler implements HttpHandler {
     public void handle(Request request, Response response) {
         String uri = request.getUri();
         String filePath = System.getProperty("user.dir") + "/src/main/resources/static" + uri;
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)))) {
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append("\n");
+        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(filePath))) {
+            byte[] bytes = new byte[bufferedInputStream.available()];
+            int left = bytes.length;
+            while (left > 0) {
+                int read = bufferedInputStream.read(bytes);
+                left -= read;
             }
             response.setStatusCode(HttpStatusCode.OK);
-            response.setBody(sb.toString());
+            response.setBody(bytes);
         } catch (FileNotFoundException e) {
             response.setStatusCode(HttpStatusCode.NotFound);
-            response.setBody(e.getMessage());
+            response.setBody(e.getMessage().getBytes());
         } catch (Exception e) {
             response.setStatusCode(HttpStatusCode.IntervalServerError);
-            response.setBody(e.getMessage());
+            response.setBody(e.getMessage().getBytes());
         }
         response.setVersion(HttpVersion.HTTP_1_1);
     }
