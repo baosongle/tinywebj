@@ -1,39 +1,35 @@
 package com.baosongle.tinywebj.core;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 class RequestParser {
     private static final String CRLF = "\r\n";
 
     static Request parse(InputStream inputStream) throws IOException, HttpParseException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         Request request = new Request();
-        String line = readHttpLine(bufferedReader);
+        String line = readHttpLine(inputStream);
         parseMethodLine(request, line);
 
         // 解析 header
-        while (!(line = readHttpLine(bufferedReader)).equals(CRLF)) {
+        while (!(line = readHttpLine(inputStream)).equals(CRLF)) {
             parseHeaderLine(request, line);
         }
 
-        // 解析 body
-        if (request.getMethod().equals(HttpMethod.POST) || request.getMethod().equals(HttpMethod.PUT)) {
-            StringBuilder bodyBuilder = new StringBuilder();
-            int i = 0;
-            while (i < 2) {
-                line = readHttpLine(bufferedReader);
-                if (line.equals(CRLF)) {
-                    if (bodyBuilder.length() == 0)
-                        break;
-                    i++;
-                    continue;
-                }
-                bodyBuilder.append(line);
+        // 关于如何截断一个 HTTP 报文非常复杂，具体可以看 https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.4
+        String contentLength = request.getHeader(HttpHeader.ContentLength.header());
+        if (contentLength != null) {
+            int length = Integer.parseInt(contentLength);
+            byte[] bodyBytes = new byte[length];
+            int read;
+            int left = length;
+            while ((read = inputStream.read(bodyBytes, length - left, left)) != -1) {
+                left -= read;
             }
-            request.setBody(bodyBuilder.length() == 0 ? null : bodyBuilder.toString());
+            request.setBody(new String(bodyBytes, StandardCharsets.UTF_8));
         }
         return request;
     }
@@ -71,27 +67,29 @@ class RequestParser {
 
     private static void parseHeaderLine(Request request, String line) throws HttpParseException {
         String[] headerPart = line.split(":");
-        if (headerPart.length != 2)
-            throw new HttpParseException("HTTP 请求的头部部分应当且仅应当包含一个冒号，实际 " + line);
+        if (headerPart.length < 2)
+            throw new HttpParseException("HTTP 请求的头部部分应当至少包含一个冒号，实际 " + line);
         String name = headerPart[0].trim();
-        String value = headerPart[1].trim();
+        String value = line.substring(name.length() + 1).trim();
         request.setHeader(name, value);
     }
 
     // 读取一行，但是保存行尾的 CRLF
-    private static String readHttpLine(BufferedReader bufferedReader) throws IOException {
-        char[] last = new char[2];
+    private static String readHttpLine(InputStream inputStream) throws IOException {
+        byte[] last = new byte[2];
         int i = 0;
-        StringBuilder sb = new StringBuilder();
+        List<Byte> byteList = new ArrayList<>(50);
         while (last[i] != '\r' && last[i == 0 ? 1 : 0] != '\n') {
-            int read = bufferedReader.read();
+            int read = inputStream.read();
             if (read == -1)
                 break;
-            char c = (char) read;
-            sb.append(c);
-            last[i] = c;
+            byteList.add((byte) read);
+            last[i] = (byte) read;
             i = i == 0 ? 1 : 0;
         }
-        return sb.toString();
+        byte[] bytes = new byte[byteList.size()];
+        for (i = 0; i < bytes.length; i++)
+            bytes[i] = byteList.get(i);
+        return new String(bytes);
     }
 }

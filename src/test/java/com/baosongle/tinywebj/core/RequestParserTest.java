@@ -12,7 +12,7 @@ public class RequestParserTest {
         String httpText = "GET /index?q=aaa HTTP/1.1\r\n" +
                 "Host: www.google.com\r\n" +
                 "Accept: application/json;charset=utf-8\r\n" +
-                "\r\n" +
+                "Referer: http://127.0.0.1/index.html\r\n" +
                 "\r\n";
         try {
             Request request = RequestParser.parse(new ByteArrayInputStream(httpText.getBytes()));
@@ -22,6 +22,7 @@ public class RequestParserTest {
             Assert.assertEquals(HttpVersion.HTTP_1_1, request.getVersion());
             Assert.assertEquals("application/json;charset=utf-8", request.getHeader("Accept"));
             Assert.assertEquals("www.google.com", request.getHeader("Host"));
+            Assert.assertEquals("http://127.0.0.1/index.html", request.getHeader("Referer"));
             Assert.assertNull(request.getBody());
         } catch (IOException | HttpParseException e) {
             e.printStackTrace();
@@ -34,10 +35,9 @@ public class RequestParserTest {
         String httpText = "POST /index?q=aaa HTTP/1.1\r\n" +
                 "Host: www.google.com\r\n" +
                 "Accept: application/json;charset=utf-8\r\n" +
+                "Content-Length: 36\r\n" +
                 "\r\n" +
-                "username=baosongle&password=123456\r\n" +
-                "\r\n" +
-                "\r\n";
+                "username=baosongle&password=123456\r\n";
         try {
             Request request = RequestParser.parse(new ByteArrayInputStream(httpText.getBytes()));
             Assert.assertNotNull(request);
@@ -58,11 +58,10 @@ public class RequestParserTest {
         String httpText = "POST /index?q=aaa HTTP/1.1\r\n" +
                 "Host: www.google.com\r\n" +
                 "Accept: application/json;charset=utf-8\r\n" +
+                "Content-Length: 72\r\n" +
                 "\r\n" +
                 "username=baosongle&password=123456\r\n" +
-                "username=baosongle&password=123456\r\n" +
-                "\r\n" +
-                "\r\n";
+                "username=baosongle&password=123456\r\n";
         try {
             Request request = RequestParser.parse(new ByteArrayInputStream(httpText.getBytes()));
             Assert.assertNotNull(request);
