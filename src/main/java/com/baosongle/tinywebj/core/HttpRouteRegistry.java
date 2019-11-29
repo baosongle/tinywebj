@@ -1,8 +1,11 @@
 package com.baosongle.tinywebj.core;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class HttpRouteRegistry {
     private static HttpRouteRegistry registry;
 
@@ -19,6 +22,7 @@ public class HttpRouteRegistry {
     private Map<HttpMethod, Map<String, HttpHandler>> methodHandlers = new HashMap<>();
 
     void register(HttpMethod method, String uri, HttpHandler httpHandler) {
+        log.info("Mapping HTTP " + method.name() + " " + uri + " => " + httpHandler.getClass().getSimpleName());
         Map<String, HttpHandler> map = methodHandlers.computeIfAbsent(method, httpMethod -> {
             Map<String, HttpHandler> handlers = new HashMap<>();
             methodHandlers.put(httpMethod, handlers);
