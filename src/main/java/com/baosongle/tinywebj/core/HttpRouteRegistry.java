@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class HttpRouteRegistry {
+class HttpRouteRegistry {
     private static HttpRouteRegistry registry;
 
-    public static HttpRouteRegistry getInstance() {
+    static HttpRouteRegistry getInstance() {
         if (registry == null) {
             synchronized (HttpRouteRegistry.class) {
                 if (registry == null)

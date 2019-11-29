@@ -7,14 +7,14 @@ import java.io.InputStream;
 import java.net.Socket;
 
 @Slf4j
-public class SocketThread {
+class SocketThread {
     private Socket socket;
 
-    public SocketThread(Socket socket) {
+    SocketThread(Socket socket) {
         this.socket = socket;
     }
 
-    public void start() {
+    void start() {
         Thread thread = new Thread(() -> {
             Request request = null;
             Response response = new Response();
