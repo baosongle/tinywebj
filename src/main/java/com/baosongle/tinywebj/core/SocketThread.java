@@ -13,19 +13,22 @@ public class SocketThread {
 
     public void start() {
         Thread thread = new Thread(() -> {
-            Response response;
+            Request request = null;
+            Response response = new Response();
+            HttpHandler httpHandler;
             try {
                 InputStream inputStream = socket.getInputStream();
-                Request request = RequestParser.parse(inputStream);
-                ResponseProcessor responseProcessor = new ResponseProcessor(request);
-                response = responseProcessor.process();
+                request = RequestParser.parse(inputStream);
+                httpHandler = HttpRouteRegistry.getInstance().getHandler(request.getMethod(), request.getUri());
+                if (httpHandler == null) {
+                    httpHandler = new HttpNotFoundHandler();
+                }
             } catch (HttpParseException e) {
-                response = new Response(HttpStatusCode.BadRequest, HttpVersion.HTTP_1_1);
-                response.setBody(e.getMessage());
+                httpHandler = new HttpBadRequestHandler("Error parse HTTP request: " + e.getMessage());
             } catch (IOException e) {
-                response = new Response(HttpStatusCode.IntervalServerError, HttpVersion.HTTP_1_1);
-                response.setBody(e.getMessage());
+                httpHandler = new HttpIntervalErrorHandler(e.getMessage());
             }
+            httpHandler.handle(request, response);
             try {
                 String responseText = ResponseParser.parse(response);
                 socket.getOutputStream().write(responseText.getBytes());
