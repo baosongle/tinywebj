@@ -30,7 +30,7 @@ class SocketThread {
             } catch (HttpParseException e) {
                 httpHandler = new HttpBadRequestHandler("Error on paring HTTP request: " + e.getMessage());
             } catch (IOException e) {
-                httpHandler = new HttpIntervalErrorHandler(e.getMessage());
+                httpHandler = new HttpInternalErrorHandler(e.getMessage());
             }
             httpHandler.handle(request, response);
             try {

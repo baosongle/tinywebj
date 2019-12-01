@@ -3,12 +3,12 @@ package com.baosongle.tinywebj.core;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class HttpIntervalErrorHandler implements HttpHandler {
+public class HttpInternalErrorHandler implements HttpHandler {
     private String errorMessage;
 
     @Override
     public void handle(Request request, Response response) {
-        response.setStatusCode(HttpStatusCode.IntervalServerError);
+        response.setStatusCode(HttpStatusCode.InternalServerError);
         response.setVersion(HttpVersion.HTTP_1_1);
         response.setBody(errorMessage.getBytes());
     }

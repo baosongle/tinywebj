@@ -27,7 +27,7 @@ public class StaticResourceHandler implements HttpHandler {
             response.setStatusCode(HttpStatusCode.NotFound);
             response.setBody(e.getMessage().getBytes());
         } catch (Exception e) {
-            response.setStatusCode(HttpStatusCode.IntervalServerError);
+            response.setStatusCode(HttpStatusCode.InternalServerError);
             response.setBody(e.getMessage().getBytes());
         }
         response.setVersion(HttpVersion.HTTP_1_1);

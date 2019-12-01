@@ -13,7 +13,7 @@ public enum HttpStatusCode {
     BadRequest(400, "Bad Request"),
     NotFound(404, "Not Found"),
 
-    IntervalServerError(500, "Interval Server Error");
+    InternalServerError(500, "Internal Server Error");
 
     @Getter
     private int statusCode;
