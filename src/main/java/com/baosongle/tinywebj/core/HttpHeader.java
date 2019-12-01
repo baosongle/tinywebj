@@ -7,7 +7,8 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @AllArgsConstructor
 public enum HttpHeader {
-    ContentLength("Content-Length");
+    ContentLength("Content-Length"),
+    ContentType("Content-Type");
 
     @Getter
     private String header;

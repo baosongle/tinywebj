@@ -1,5 +1,7 @@
 package com.baosongle.tinywebj.core;
 
+import java.util.Map;
+
 class ResponseParser {
     private static final String CRLF = "\r\n";
 
@@ -15,8 +17,14 @@ class ResponseParser {
         sb.append(HttpHeader.ContentLength.header())
                 .append(": ")
                 .append(response.getContentLength())
-                .append(CRLF)
                 .append(CRLF);
+        for (Map.Entry<HttpHeader, String> headerEntries : response.getHeaders().entrySet()) {
+            sb.append(headerEntries.getKey().header())
+                    .append(": ")
+                    .append(headerEntries.getValue())
+                    .append(CRLF);
+        }
+        sb.append(CRLF);
         byte[] nonBodyBytes = sb.toString().getBytes();
         if (response.getBody() == null)
             return nonBodyBytes;

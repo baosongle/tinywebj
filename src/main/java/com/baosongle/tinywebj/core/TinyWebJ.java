@@ -15,6 +15,7 @@ public class TinyWebJ {
     public void run() throws IOException {
         log.info("TinyWebJ running at 0.0.0.0:" + port);
         HttpRouteRegistry.getInstance().register(HttpMethod.GET, "/index.html", new StaticResourceHandler());
+        HttpRouteRegistry.getInstance().register(HttpMethod.GET, "/tinywebj.png", new StaticResourceHandler());
 
         ServerSocket serverSocket = new ServerSocket(port);
         Socket socket;
