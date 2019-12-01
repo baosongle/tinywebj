@@ -20,9 +20,6 @@ public class TinyWebJ {
         ServerSocket serverSocket = new ServerSocket(port);
         Socket socket;
         while ((socket = serverSocket.accept()) != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("Incoming socket at {}", socket.getRemoteSocketAddress().toString());
-            }
             SocketThread socketThread = new SocketThread(socket);
             socketThread.start();
         }
