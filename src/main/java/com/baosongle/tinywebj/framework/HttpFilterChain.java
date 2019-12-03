@@ -4,16 +4,21 @@ import com.baosongle.tinywebj.core.Request;
 import com.baosongle.tinywebj.core.Response;
 import lombok.Data;
 
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
 @Data
 public class HttpFilterChain {
-    private Action action = new Action();
+    private Action action;
+    private String uri;
     private Request request;
     private Response response;
     private List<HttpFilter> preFilters = new LinkedList<>();
     private List<HttpFilter> postFilters = new LinkedList<>();
+
+    private Object controller;
+    private Method method;
 
     public void addPreFilter(HttpFilter httpFilter) {
         preFilters.add(httpFilter);
@@ -24,6 +29,7 @@ public class HttpFilterChain {
     }
 
     public void doFilters() {
+        action = new Action(uri, controller, method);
         try {
             for (HttpFilter filter : preFilters) {
                 filter.doFilter(request, response, action);

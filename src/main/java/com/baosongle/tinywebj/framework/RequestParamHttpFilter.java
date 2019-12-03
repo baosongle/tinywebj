@@ -24,28 +24,18 @@ public class RequestParamHttpFilter implements HttpFilter {
             return;
         }
         if (paramClass.equals(String.class)) {
-            action.getParameters().set(paramIndex, value);
-        } else if (Number.class.isAssignableFrom(paramClass)) {
+            action.getParameters().add(value);
+        } else if (isNumericType(paramClass)) {
             try {
-                if (paramClass.equals(Long.class)) {
-                    action.getParameters().set(paramIndex, Long.valueOf(value));
-                } else if (paramClass.equals(Integer.class)) {
-                    action.getParameters().set(paramIndex, Integer.valueOf(value));
-                } else if (paramClass.equals(Double.class)) {
-                    action.getParameters().set(paramIndex, Double.valueOf(value));
-                } else if (paramClass.equals(Short.class)) {
-                    action.getParameters().set(paramIndex, Short.valueOf(value));
-                } else if (paramClass.equals(Float.class)) {
-                    action.getParameters().set(paramIndex, Float.valueOf(value));
-                } else {
-                    String msg = String.format("The required type %s of %s.%s() is not supported.",
-                            paramClass.getSimpleName(), controllerClass.getSimpleName(), method.getName());
-                    throw new HttpFilterFormatException(msg);
-                }
+                parseNumericType(value, action);
             } catch (NumberFormatException e) {
                 String msg = String.format("String [%s] cannot be format to %s.", value, paramClass);
                 throw new HttpFilterFormatException(msg);
             }
+        } else {
+            String msg = String.format("The required type %s of %s.%s() is not supported.",
+                    paramClass.getSimpleName(), controllerClass.getSimpleName(), method.getName());
+            throw new HttpFilterFormatException(msg);
         }
     }
 
@@ -57,9 +47,10 @@ public class RequestParamHttpFilter implements HttpFilter {
         String queryString = uri.substring(qIndex + 1);
         String[] paramAndValues = queryString.split("&");
         for (String paramAndValue : paramAndValues) {
-            if (paramAndValue.startsWith(name + "=")) {
-                int paramIndex = paramAndValue.indexOf(name + "=");
-                value = paramAndValue.substring(paramIndex + 1);
+            String paramEqual = name + "=";
+            if (paramAndValue.startsWith(paramEqual)) {
+                int paramIndex = paramAndValue.indexOf(paramEqual);
+                value = paramAndValue.substring(paramIndex + paramEqual.length());
                 break;
             }
         }
@@ -76,5 +67,31 @@ public class RequestParamHttpFilter implements HttpFilter {
             }
         }
         return value;
+    }
+
+    private boolean isNumericType(Class<?> clazz) {
+        return clazz.equals(Long.class) || clazz.equals(long.class) ||
+                clazz.equals(Integer.class) || clazz.equals(int.class) ||
+                clazz.equals(Double.class) || clazz.equals(double.class) ||
+                clazz.equals(Float.class) || clazz.equals(float.class) ||
+                clazz.equals(Short.class) || clazz.equals(short.class);
+    }
+
+    private void parseNumericType(String value, Action action) throws HttpFilterException {
+        if (paramClass.equals(Long.class) || paramClass.equals(long.class)) {
+            action.getParameters().add(Long.valueOf(value));
+        } else if (paramClass.equals(Integer.class) || paramClass.equals(int.class)) {
+            action.getParameters().add(Integer.valueOf(value));
+        } else if (paramClass.equals(Double.class) || paramClass.equals(double.class)) {
+            action.getParameters().add(Double.valueOf(value));
+        } else if (paramClass.equals(Short.class) || paramClass.equals(short.class)) {
+            action.getParameters().add(Short.valueOf(value));
+        } else if (paramClass.equals(Float.class) || paramClass.equals(float.class)) {
+            action.getParameters().add(Float.valueOf(value));
+        } else {
+            String msg = String.format("The required type %s of %s.%s() is not supported.",
+                    paramClass.getSimpleName(), controllerClass.getSimpleName(), method.getName());
+            throw new HttpFilterFormatException(msg);
+        }
     }
 }
