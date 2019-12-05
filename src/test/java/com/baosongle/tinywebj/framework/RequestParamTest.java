@@ -1,5 +1,6 @@
 package com.baosongle.tinywebj.framework;
 
+import com.baosongle.tinywebj.core.HttpMethod;
 import com.baosongle.tinywebj.core.Request;
 import com.baosongle.tinywebj.core.Response;
 import org.junit.Assert;
@@ -18,10 +19,9 @@ public class RequestParamTest {
     public void testRequestParamStringType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/String"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/String 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/String");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/String 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/String?string=baosongle");
@@ -40,10 +40,9 @@ public class RequestParamTest {
     public void testRequestParamLongType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/Long"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/Long 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/Long");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/Long 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/Long?long=1");
@@ -62,10 +61,9 @@ public class RequestParamTest {
     public void testRequestParam_longType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/long"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/Long 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/long");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/long 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/long?long=2");
@@ -84,10 +82,9 @@ public class RequestParamTest {
     public void testRequestParamDoubleType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/Double"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/Long 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/Double");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/Double 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/Double?double=3");
@@ -106,10 +103,9 @@ public class RequestParamTest {
     public void testRequestParam_doubleType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/double"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/Long 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/double");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/Long 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/double?double=4");
@@ -128,10 +124,9 @@ public class RequestParamTest {
     public void testRequestParamIntegerType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/Integer"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/Integer 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/Integer");
+        if (httpFilterChain == null)
+                throw new RuntimeException("/Integer 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/Integer?integer=5");
@@ -150,10 +145,9 @@ public class RequestParamTest {
     public void testRequestParam_integerType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/integer"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/integer 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/integer");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/integer 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/integer?integer=6");
@@ -172,10 +166,9 @@ public class RequestParamTest {
     public void testRequestParamShortType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/Short"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/Short 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/Short");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/Short 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/Short?short=7");
@@ -194,10 +187,9 @@ public class RequestParamTest {
     public void testRequestParam_shortType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/short"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/Long 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/short");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/Long 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/short?short=8");
@@ -216,10 +208,9 @@ public class RequestParamTest {
     public void testRequestParamFloatType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/Float"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/Short 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/Float");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/Float 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/Float?float=9");
@@ -238,10 +229,9 @@ public class RequestParamTest {
     public void testRequestParam_floatType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/float"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/Long 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/float");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/Long 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/float?float=10");
@@ -260,10 +250,9 @@ public class RequestParamTest {
     public void testRequestParam_intLongType() {
         scanner.scan();
 
-        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
-                .filter(chain -> chain.getUri().equals("/intLong"))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("/intLong 不存在"));
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChain(HttpMethod.GET, "/intLong");
+        if (httpFilterChain == null)
+            throw new RuntimeException("/intLong 不存在");
         Assert.assertNotNull(httpFilterChain);
         Request request = new Request();
         request.setUri("/intLong?i=11&l=12");
