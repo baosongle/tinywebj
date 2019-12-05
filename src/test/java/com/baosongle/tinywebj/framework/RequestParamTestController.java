@@ -1,7 +1,7 @@
 package com.baosongle.tinywebj.framework;
 
 @Controller
-public class TestController {
+public class RequestParamTestController {
     @GetMapping("/String")
     public String _string(@RequestParam("string") String string) {
         return "_string";
