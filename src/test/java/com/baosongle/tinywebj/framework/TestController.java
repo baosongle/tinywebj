@@ -56,4 +56,9 @@ public class TestController {
     public String _float(@RequestParam("float") float value) {
         return "_float";
     }
+
+    @GetMapping("/intLong")
+    public String _intLong(@RequestParam("i") int i, @RequestParam("l") long l) {
+        return String.format("%s-%s", i, l);
+    }
 }

@@ -256,4 +256,28 @@ public class RequestParamTest {
         Assert.assertEquals(Float.class, action.getParameters().get(0).getClass());
         Assert.assertEquals(10F, action.getParameters().get(0));
     }
+
+    @Test
+    public void testRequestParam_intLongType() {
+        scanner.scan();
+
+        HttpFilterChain httpFilterChain = scanner.getHttpFilterChains().stream()
+                .filter(chain -> chain.getUri().equals("/intLong"))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("/intLong 不存在"));
+        Assert.assertNotNull(httpFilterChain);
+        Request request = new Request();
+        request.setUri("/intLong?i=11&l=12");
+        Response response = new Response();
+        httpFilterChain.setRequest(request);
+        httpFilterChain.setResponse(response);
+        httpFilterChain.doFilters();
+        Action action = httpFilterChain.getAction();
+        Assert.assertNotNull(action);
+        Assert.assertEquals(2, action.getParameters().size());
+        Assert.assertEquals(Integer.class, action.getParameters().get(0).getClass());
+        Assert.assertEquals(Long.class, action.getParameters().get(1).getClass());
+        Assert.assertEquals(11, action.getParameters().get(0));
+        Assert.assertEquals(12L, action.getParameters().get(1));
+    }
 }
