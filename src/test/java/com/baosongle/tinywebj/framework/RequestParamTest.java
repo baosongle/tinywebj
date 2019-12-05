@@ -11,8 +11,7 @@ public class RequestParamTest {
 
     @Before
     public void setup() {
-        scanner = new AnnotationScanner();
-        scanner.setBasePackage("com.baosongle.tinywebj.framework");
+        scanner = new AnnotationScanner("com.baosongle.tinywebj.framework");
     }
 
     @Test

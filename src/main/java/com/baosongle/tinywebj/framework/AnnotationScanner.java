@@ -5,13 +5,15 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class AnnotationScanner {
     private String basePackage;
+
+    public AnnotationScanner(String basePackage) {
+        this.basePackage = basePackage;
+    }
 
     private List<HttpFilterChain> httpFilterChains = new LinkedList<>();
 
